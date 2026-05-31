@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoTrack | Workflow valdymas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="auth-loading workflow-page">
+  <div class="page-shell" id="appContent">
+    <header class="navbar">
+      <a href="index.html" class="brand">
+        <span class="brand-mark">
+          <span class="needle"></span>
+        </span>
+        <span>Auto<span>Track</span></span>
+      </a>
+
+      <nav class="nav-links" aria-label="Pagrindinė navigacija">
+        <a href="index.html">Pagrindinis</a>
+        <a href="index.html#filters">Filtrai</a>
+        <a href="index.html#stats">Statistika</a>
+        <a href="workflow.html" class="active">Workflow</a>
+      </nav>
+
+      <button class="login-btn" id="logoutBtn">
+        Atsijungti
+      </button>
+    </header>
+
+    <main>
+      <section class="workflow-hero">
+        <div>
+          <p class="eyebrow">Automatizacijų valdymas</p>
+          <h1>Workflow būsena viename lange</h1>
+          <p class="hero-text">
+            Stebėk, kurie procesai aktyvūs, kurie sustabdyti, ir valdyk pagrindines
+            automatizacijas vienu ON/OFF jungikliu.
+          </p>
+        </div>
+
+        <div class="workflow-hero-card glass-card">
+          <span>Sistemos būsena</span>
+          <strong id="workflowSystemStatusTitle"><i></i> Kraunama...</strong>
+          <p id="workflowSystemStatusText">Tikrinamos workflow būsenos per 04 workflow. Būsena atsinaujina automatiškai kas 15 sek.</p>
+        </div>
+      </section>
+
+      <section id="workflow" class="workflow-card glass-card workflow-page-card">
+        <div class="section-title">
+          <span class="title-icon red">⌁</span>
+          <div>
+            <h2>Workflow apžvalga</h2>
+            <p>Čia valdoma visų automatizacijų būsena, ne atskiri automobilių filtrai. Sąrašas automatiškai persikrauna kas 15 sek.</p>
+          </div>
+        </div>
+
+        <div class="workflow-layout">
+          <div class="workflow-list" id="workflowList">
+            <div class="workflow-empty-state">
+              <strong>Kraunami workflow...</strong>
+              <p>Skaitoma Google Sheets WorkflowControl lentelė per 04 workflow.</p>
+            </div>
+          </div>
+
+          <div class="workflow-stats">
+            <div>
+              <span>Aktyvūs</span>
+              <strong class="green" id="workflowActiveCount">—</strong>
+              <small>Veikia dabar</small>
+            </div>
+            <div>
+              <span>Neaktyvūs</span>
+              <strong class="red-text" id="workflowInactiveCount">—</strong>
+              <small>Sustabdyta</small>
+            </div>
+            <div>
+              <span>Iš viso</span>
+              <strong class="blue-text" id="workflowTotalCount">—</strong>
+              <small>Workflow</small>
+            </div>
+
+            <div class="system-status">
+              <span>Valdymas</span>
+              <b><i></i> Google Sheets + n8n API</b>
+              <small>ON/OFF būsena sinchronizuojama per 04 workflow.</small>
+            </div>
+          </div>
+        </div>
+
+        <div id="workflowFeedback" class="workflow-feedback" aria-live="polite"></div>
+      </section>
+
+      <section class="workflow-details-grid">
+        <article class="glass-card workflow-detail-card">
+          <span class="detail-kicker">01 workflow</span>
+          <h2>Create Filter</h2>
+          <p>
+            Priima naujo filtro duomenis iš svetainės, patikrina dublikatus,
+            įrašo filtrą į Google Sheets ir paleidžia Autogidas scraperį.
+          </p>
+          <ul>
+            <li>Trigger: Webhook iš svetainės</li>
+            <li>Duomenų bazė: Filters sheet</li>
+            <li>Output: filtro ID ir scraper startas</li>
+          </ul>
+        </article>
+
+        <article class="glass-card workflow-detail-card">
+          <span class="detail-kicker">02 workflow</span>
+          <h2>Scrape Active Filters & Save Stats</h2>
+          <p>
+            Scrape’ina Autogidas pagal aktyvius filtrus arba konkretų filter_id,
+            atnaujina Listings ir įrašo kainų istorijos snapshot’us.
+          </p>
+          <ul>
+            <li>Trigger: Webhook / manual / schedule</li>
+            <li>Output: Listings + ListingPriceHistory</li>
+            <li>Pastaba: OFF būsenoje nauji duomenys nebus renkami</li>
+          </ul>
+        </article>
+
+        <article class="glass-card workflow-detail-card">
+          <span class="detail-kicker">03 workflow</span>
+          <h2>Get Listing Statistics</h2>
+          <p>
+            Pagal filter_id grąžina paskutinę statistiką ir istoriją frontend
+            grafikui. Šį workflow naudoja statistikos skiltis svetainėje.
+          </p>
+          <ul>
+            <li>Trigger: Webhook iš frontend</li>
+            <li>Duomenų šaltinis: ListingPriceHistory</li>
+            <li>Output: min / avg / max / history JSON</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="brand footer-brand">
+        <span class="brand-mark">
+          <span class="needle"></span>
+        </span>
+        <span>Auto<span>Track</span></span>
+      </div>
+
+      <div>
+        <h3>Produktas</h3>
+        <a href="index.html">Pagrindinis</a>
+        <a href="index.html#filters">Filtrai</a>
+        <a href="index.html#stats">Statistika</a>
+        <a href="workflow.html">Workflow</a>
+      </div>
+
+      <div>
+        <h3>Pagalba</h3>
+        <a href="#">DUK</a>
+        <a href="#">Kaip veikia?</a>
+        <a href="#">Kontaktai</a>
+      </div>
+
+      <div>
+        <h3>Teisinė informacija</h3>
+        <a href="#">Privatumo politika</a>
+        <a href="#">Naudojimo sąlygos</a>
+      </div>
+
+      <div>
+        <p>© 2026 AutoTrack</p>
+        <p>Visos teisės saugomos.</p>
+        <div class="socials">
+          <span>✈</span>
+          <span>f</span>
+          <span>✉</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- FIREBASE AUTH GUARD -->
+  <script type="module">
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHKtWTZ-HyPdo7-5cmHbXwS36z92mbsu0",
+      authDomain: "autotrack-51d5b.firebaseapp.com",
+      projectId: "autotrack-51d5b",
+      storageBucket: "autotrack-51d5b.firebasestorage.app",
+      messagingSenderId: "42257464237",
+      appId: "1:42257464237:web:ec2a2c6efbb81f60bfff24",
+      measurementId: "G-H39NFRVEWW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.body.classList.remove("auth-loading", "auth-logged-out");
+        document.body.classList.add("auth-logged-in");
+      } else {
+        window.location.replace("index.html");
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.replace("index.html");
+    });
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>AutoTrack | Automobilių kainų stebėjimas</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="auth-loading">
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="loginScreen">
+
+    <div class="login-modal glass-card">
+
+      <div class="login-top">
+        <p class="login-kicker">AutoTrack sistema</p>
+
+        <h2>Prisijungimas</h2>
+
+        <p>
+          Prisijunkite prie savo AutoTrack paskyros,
+          kad matytumėte sistemos duomenis.
+        </p>
+      </div>
+
+      <form id="loginForm" class="login-form" novalidate>
+
+        <label>
+          <span>El. paštas</span>
+
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="pvz. admin@autotrack.lt"
+            required
+          />
+        </label>
+
+        <label>
+          <span>Slaptažodis</span>
+
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="••••••••"
+            required
+          />
+        </label>
+
+        <button
+          type="submit"
+          class="btn btn-primary login-submit"
+        >
+          Prisijungti
+        </button>
+
+        <div id="loginError"></div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div class="page-shell" id="appContent">
+
+    <header class="navbar">
+
+      <a href="#" class="brand">
+
+        <span class="brand-mark">
+          <span class="needle"></span>
+        </span>
+
+        <span>
+          Auto<span>Track</span>
+        </span>
+
+      </a>
+
+      <nav
+        class="nav-links"
+        aria-label="Pagrindinė navigacija"
+      >
+        <a href="#home" class="active">
+          Pagrindinis
+        </a>
+
+        <a href="#filters">
+          Filtrai
+        </a>
+
+        <a href="#stats">
+          Statistika
+        </a>
+
+        <a href="workflow.html">
+          Workflow
+        </a>
+      </nav>
+
+      <button class="login-btn" id="logoutBtn">
+        Atsijungti
+      </button>
+
+    </header>
+
+    <main>
+
+      <section id="home" class="hero">
+
+        <div class="hero-content">
+
+          <p class="eyebrow">
+            Automobilių kainų stebėjimo sistema
+          </p>
+
+          <h1>
+            Stebėk automobilių kainas išmaniau
+          </h1>
+
+          <p class="hero-text">
+            Kurk filtrus pagal markę, modelį ir metus,
+            stebėk kainų pokyčius laike ir gauk Telegram
+            pranešimus apie naujus gerus pasiūlymus.
+          </p>
+
+          <div class="hero-actions">
+
+            <a href="#filters" class="btn btn-primary">
+              <span>▽</span>
+              Sukurti filtrą
+            </a>
+
+            <a href="#stats" class="btn btn-secondary">
+              <span>▥</span>
+              Peržiūrėti statistiką
+            </a>
+
+          </div>
+
+        </div>
+
+        <div
+          class="hero-car hero-car-image"
+          aria-hidden="true"
+        >
+
+          <div class="speed-line line-one"></div>
+          <div class="speed-line line-two"></div>
+          <div class="speed-line line-three"></div>
+
+          <img
+            src="images/hero-car.png"
+            alt="Sportinis automobilis"
+          />
+
+        </div>
+
+      </section>
+
+      <section
+        id="filters"
+        class="filter-card glass-card"
+      >
+
+        <div class="section-title">
+
+          <span class="title-icon red">
+            ▽
+          </span>
+
+          <div>
+
+            <h2>
+              Sukurti naują filtrą
+            </h2>
+
+            <p>
+              Statistikos filtras kuriamas tik iš markės,
+              modelio ir metų intervalo.
+            </p>
+
+          </div>
+
+        </div>
+
+        <form class="filter-form" id="filterForm">
+
+          <label>
+
+            <span>Markė</span>
+
+            <select id="brand" required>
+              <option value="">
+                Pasirinkite markę
+              </option>
+            </select>
+
+          </label>
+
+          <label>
+
+            <span>Modelis</span>
+
+            <select id="model" required disabled>
+              <option value="">
+                Pasirinkite modelį
+              </option>
+            </select>
+
+          </label>
+
+          <label>
+
+            <span>Metai nuo</span>
+
+            <select id="yearFrom" required>
+            </select>
+
+          </label>
+
+          <label>
+
+            <span>Metai iki</span>
+
+            <select id="yearTo" required>
+            </select>
+
+          </label>
+
+          <button
+            type="submit"
+            class="btn btn-primary form-submit"
+          >
+            Kurti filtrą
+          </button>
+
+        </form>
+
+        <div id="filterFeedback" class="filter-feedback" aria-live="polite"></div>
+
+      </section>
+
+
+      <section id="createdFilters" class="created-filters glass-card">
+        <div class="section-title">
+          <span class="title-icon blue">▦</span>
+          <div>
+            <h2>Sukurti filtrai</h2>
+            <p>Čia atsiras naujai sukurti markės, modelio ir metų intervalo filtrai.</p>
+          </div>
+        </div>
+
+        <div class="filters-table">
+          <div class="table-row filters-header-row">
+            <span>Automobilis</span>
+            <span>Metai</span>
+            <span>Filtro ID</span>
+            <span>Būsena</span>
+            <span>Veiksmas</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="dashboard-grid">
+
+        <article
+          id="stats"
+          class="stats-card glass-card"
+        >
+
+          <div class="card-header">
+
+            <div class="section-title compact">
+
+              <span class="title-icon red">
+                ↗
+              </span>
+
+              <div>
+                <h2 id="statsTitle">
+                  Kainų statistika
+                </h2>
+                <p id="statsSubtitle" class="stats-subtitle">
+                  Pasirinkite sukurtą filtrą ir spauskite „Patikrinti statistiką“.
+                </p>
+              </div>
+
+            </div>
+
+            <div class="segmented-controls">
+
+              <button type="button">7 d.</button>
+              <button type="button" class="active">30 d.</button>
+              <button type="button">90 d.</button>
+              <button type="button">Visi duomenys</button>
+
+            </div>
+
+          </div>
+
+          <div class="chart-mode stats-actions-bar">
+
+            <button class="active" type="button">
+              Autogidas istorija
+            </button>
+
+            <button type="button" id="refreshSelectedStatsBtn" disabled>
+              Patikrinti / atnaujinti statistiką
+            </button>
+
+          </div>
+
+          <div class="stats-kpi-grid" id="statsSummary">
+            <div>
+              <span>Min kaina</span>
+              <strong id="minPriceValue">—</strong>
+            </div>
+            <div>
+              <span>Vidutinė kaina</span>
+              <strong id="avgPriceValue">—</strong>
+            </div>
+            <div>
+              <span>Maks kaina</span>
+              <strong id="maxPriceValue">—</strong>
+            </div>
+            <div>
+              <span>Skelbimų kiekis</span>
+              <strong id="listingCountValue">—</strong>
+            </div>
+          </div>
+
+          <div class="chart-wrap statistics-chart-wrap" id="statisticsChartWrap">
+
+            <div class="stats-empty-state" id="statsEmptyState">
+              <strong>Statistika dar nepasirinkta</strong>
+              <p>Sukurkite filtrą arba pasirinkite filtrą ir spauskite „Patikrinti statistiką“.</p>
+            </div>
+
+            <div class="price-line-chart" id="priceLineChart" hidden>
+              <div class="history-tooltip" id="historyTooltip" hidden></div>
+
+              <svg
+                class="history-line-svg"
+                id="historyLineSvg"
+                role="img"
+                aria-label="Kainų istorijos grafikas"
+              ></svg>
+
+              <div class="history-legend" aria-label="Grafiko legenda">
+                <span><i class="legend-dot min"></i>Min</span>
+                <span><i class="legend-dot avg"></i>Vidurkis</span>
+                <span><i class="legend-dot max"></i>Maks</span>
+              </div>
+            </div>
+
+            <div class="price-bar-chart" id="priceBarChart" hidden></div>
+
+          </div>
+
+          <div class="chart-footer">
+
+            <span id="statsSourceLabel">
+              ⓘ Duomenys iš Autogidas.lt
+            </span>
+
+            <span id="statsUpdatedLabel">
+              Atnaujinta: —
+            </span>
+
+          </div>
+
+        </article>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- FIREBASE -->
+  <script type="module">
+
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+
+      apiKey:
+        "AIzaSyCHKtWTZ-HyPdo7-5cmHbXwS36z92mbsu0",
+
+      authDomain:
+        "autotrack-51d5b.firebaseapp.com",
+
+      projectId:
+        "autotrack-51d5b",
+
+      storageBucket:
+        "autotrack-51d5b.firebasestorage.app",
+
+      messagingSenderId:
+        "42257464237",
+
+      appId:
+        "1:42257464237:web:ec2a2c6efbb81f60bfff24",
+
+      measurementId:
+        "G-H39NFRVEWW"
+    };
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const auth =
+      getAuth(app);
+
+    const loginScreen =
+      document.getElementById("loginScreen");
+
+    const appContent =
+      document.getElementById("appContent");
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const loginError =
+      document.getElementById("loginError");
+
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+    const showLogin = () => {
+      document.body.classList.remove("auth-loading", "auth-logged-in");
+      document.body.classList.add("auth-logged-out");
+      loginScreen.setAttribute("aria-hidden", "false");
+      appContent.setAttribute("aria-hidden", "true");
+    };
+
+    const showApp = () => {
+      document.body.classList.remove("auth-loading", "auth-logged-out");
+      document.body.classList.add("auth-logged-in");
+      loginScreen.setAttribute("aria-hidden", "true");
+      appContent.setAttribute("aria-hidden", "false");
+    };
+
+    // LOGIN
+    loginForm.addEventListener(
+      "submit",
+      async (event) => {
+
+        event.preventDefault();
+
+        loginError.textContent = "";
+        loginForm.classList.remove("has-error");
+
+        const emailInput =
+          document.getElementById("loginEmail");
+
+        const passwordInput =
+          document.getElementById("loginPassword");
+
+        const email =
+          emailInput.value.trim();
+
+        const password =
+          passwordInput.value;
+
+        const emailPattern =
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email) {
+          loginForm.classList.add("has-error");
+          loginError.textContent =
+            "Įveskite el. pašto adresą.";
+          emailInput.focus();
+          return;
+        }
+
+        if (!emailPattern.test(email)) {
+          loginForm.classList.add("has-error");
+          loginError.textContent =
+            "El. pašto adresas turi būti teisingo formato, pvz. admin@autotrack.lt.";
+          emailInput.focus();
+          return;
+        }
+
+        if (!password) {
+          loginForm.classList.add("has-error");
+          loginError.textContent =
+            "Įveskite slaptažodį.";
+          passwordInput.focus();
+          return;
+        }
+
+        try {
+
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+        } catch (error) {
+
+          console.error(error);
+
+          showLogin();
+          loginForm.classList.add("has-error");
+          loginError.textContent =
+            "Prisijungti nepavyko. Patikrinkite el. paštą ir slaptažodį.";
+
+        }
+
+      }
+    );
+
+    // AUTH CHECK: app stays hidden until Firebase confirms a logged-in user.
+    onAuthStateChanged(auth, (user) => {
+
+      if (user) {
+
+        window.autoTrackCurrentUserEmail = user.email || "website";
+        showApp();
+
+      } else {
+
+        window.autoTrackCurrentUserEmail = "website";
+        showLogin();
+
+      }
+
+    });
+
+    // LOGOUT
+    logoutBtn.addEventListener(
+      "click",
+      async () => {
+
+        await signOut(auth);
+        showLogin();
+
+      }
+    );
+
+  </script>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
